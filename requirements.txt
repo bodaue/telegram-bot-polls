@@ -1,0 +1,17 @@
+aiogram>=3.0.0b7
+environs~=9.0
+betterlogging~=0.2.1
+
+gspread~=3.7.0
+oauth2client~=4.1.3
+google-api-python-client~=2.9.0
+google-auth-httplib2
+google-auth-oauthlib
+
+gspread-asyncio
+
+git+git://github.com/robin900/gspread-formatting
+
+Faker~=8.8.1
+pymongo~=4.3.3
+motor~=3.1.2
