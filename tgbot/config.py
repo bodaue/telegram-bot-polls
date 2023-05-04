@@ -3,6 +3,7 @@ from typing import Any
 
 from environs import Env
 from google.oauth2.service_account import Credentials
+from gspread_asyncio import AsyncioGspreadClientManager
 
 
 @dataclass
@@ -23,7 +24,7 @@ class TgBot:
 
 @dataclass
 class Miscellaneous:
-    scoped_credentials: Any = None
+    google_client_manager: AsyncioGspreadClientManager = None
 
 
 @dataclass
@@ -50,6 +51,7 @@ def load_config(path: str = None) -> Config:
     ]
     google_credentials = Credentials.from_service_account_file('tgbot/config-google.json')
     scoped_credentials = get_scoped_credentials(google_credentials, scopes)
+    google_client_manager = AsyncioGspreadClientManager(scoped_credentials)
 
     return Config(
         tg_bot=TgBot(
@@ -66,6 +68,6 @@ def load_config(path: str = None) -> Config:
         # ),
 
         misc=Miscellaneous(
-            scoped_credentials=scoped_credentials
+            google_client_manager=google_client_manager
         )
     )

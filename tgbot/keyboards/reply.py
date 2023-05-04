@@ -11,20 +11,20 @@ yes_no_keyboard = ReplyKeyboardMarkup(
     resize_keyboard=True,
     input_field_placeholder='Выберите ответ')
 
-initial_payment = ['2.000-5.000$',
-                   'от 5.000$',
-                   'от 10.000$',
-                   'более 10.000$']
+initial_payments = ['2.000-5.000',
+                    'от 5.000',
+                    'от 10.000',
+                    'более 10.000']
 
-budget = ['до 10.000$',
-          'до 20.000$',
-          'до 30.000$',
-          'более 30.000$']
+budgets = ['до 10.000',
+           'до 20.000',
+           'до 30.000',
+           'более 30.000']
 
 
 def initial_payment_keyboard() -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
-    for amount in initial_payment:
+    for amount in initial_payments:
         builder.add(KeyboardButton(text=amount))
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True,
@@ -33,7 +33,7 @@ def initial_payment_keyboard() -> ReplyKeyboardMarkup:
 
 def budget_keyboard() -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
-    for amount in budget:
+    for amount in budgets:
         builder.add(KeyboardButton(text=amount))
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True,

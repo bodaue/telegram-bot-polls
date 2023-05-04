@@ -2,15 +2,15 @@ import asyncio
 import logging
 
 import betterlogging as bl
-import gspread_asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from tgbot.config import load_config
 from tgbot.handlers.admin import admin_router
-from tgbot.handlers.echo import echo_router
+from tgbot.handlers.other_messages import not_caught_router
 from tgbot.handlers.user import user_router
 from tgbot.middlewares.config import ConfigMiddleware
+from tgbot.middlewares.throttling import ThrottlingMiddleware
 from tgbot.misc.mongostorage import MongoStorage
 from tgbot.misc.set_bot_commands import set_default_commands
 from tgbot.services import broadcaster
@@ -27,6 +27,7 @@ async def on_startup(bot: Bot, admin_ids: list[int]):
 def register_global_middlewares(dp: Dispatcher, config):
     dp.message.outer_middleware(ConfigMiddleware(config))
     dp.callback_query.outer_middleware(ConfigMiddleware(config))
+    dp.message.middleware(ThrottlingMiddleware())
 
 
 def register_logger():
@@ -49,16 +50,11 @@ async def main():
 
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(storage=storage)
-    google_client_manager = gspread_asyncio.AsyncioGspreadClientManager(
-        config.misc.scoped_credentials
-    )
-
-    bot.google_client_manager = google_client_manager
 
     for router in [
         admin_router,
         user_router,
-        echo_router
+        not_caught_router
     ]:
         dp.include_router(router)
 
