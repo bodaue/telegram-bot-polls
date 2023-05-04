@@ -12,16 +12,19 @@ from tgbot.misc.states import QuestionsState
 from tgbot.services.google_sheets import write_to_sheet
 
 user_router = Router()
+user_router.message.filter(F.chat.type == "private")
+user_router.callback_query.filter(F.message.chat.type == 'private')
 
 
 @user_router.message(CommandStart(), flags={'throttling_key': 'default'})
 async def user_start(message: Message, state: FSMContext):
     await state.clear()
     text = (
-        'Здравствуйте! Ответьте всего на 5 вопросов, чтобы мы могли понять, '
-        'какие автомобили мы сможем Вам предложить\n\n'
+        '<code>Здравствуйте! Ответьте всего на 5 вопросов, чтобы мы могли понять, '
+        'какие автомобили мы сможем Вам предложить</code>\n\n'
 
-        '1. Какие марки авто Вы рассматриваете к покупке? (Напишите марки автомобилей, которые Вам нравятся)')
+        '1. Какие марки авто Вы рассматриваете к покупке?\n'
+        '<code>Напишите марки автомобилей, которые Вам нравятся</code>')
     await message.answer(text=text, reply_markup=ReplyKeyboardRemove())
     await state.set_state(QuestionsState.Q1)
 
@@ -43,7 +46,6 @@ async def process_answer1(message: Message, state: FSMContext):
 @user_router.callback_query(QuestionsState.Q2, F.data.in_(['yes', 'no']))
 async def process_answer2(call: CallbackQuery, state: FSMContext):
     data = call.data
-    print(data)
     if data == 'yes':
         using_ssn = True
     elif data == 'no':
@@ -128,9 +130,9 @@ async def process_phone_number(message: Message, state: FSMContext, config: Conf
     try:
         google_client_manager = config.misc.google_client_manager
         google_client = await google_client_manager.authorize()
-        key = '12u88lB9kssi8U5WbClSrfeZ51aWMq4qVgQ19VPJGWIg'
-        spreadsheet = await google_client.open_by_key(key)
-        worksheet = await spreadsheet.worksheet('Лист1')
+        sheet_key = config.misc.google_sheet_key
+        spreadsheet = await google_client.open_by_key(sheet_key)
+        worksheet = await spreadsheet.worksheet('Prime')
         await write_to_sheet(worksheet, date, time, username, phone, car_brands, using_ssn, credit, initial_payment,
                              budget)
     except Exception as e:

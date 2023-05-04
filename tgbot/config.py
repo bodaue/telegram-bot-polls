@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Any
 
 from environs import Env
 from google.oauth2.service_account import Credentials
@@ -20,11 +19,13 @@ class TgBot:
     token: str
     admin_ids: list[int]
     use_mongo_storage: bool
+    chat_id: int
 
 
 @dataclass
 class Miscellaneous:
     google_client_manager: AsyncioGspreadClientManager = None
+    google_sheet_key: str = None
 
 
 @dataclass
@@ -57,17 +58,13 @@ def load_config(path: str = None) -> Config:
         tg_bot=TgBot(
             token=env.str("BOT_TOKEN"),
             admin_ids=env.list('ADMINS', subcast=int),
-            use_mongo_storage=env.bool("USE_MONGO_STORAGE")
+            use_mongo_storage=env.bool("USE_MONGO_STORAGE"),
+            chat_id=env.int('CHAT_ID')
         ),
 
-        # db=DbConfig(
-        #     host=env.str('DB_HOST'),
-        #     password=env.str('POSTGRES_PASSWORD'),
-        #     user=env.str('POSTGRES_USER'),
-        #     database=env.str('POSTGRES_DB'),
-        # ),
-
         misc=Miscellaneous(
-            google_client_manager=google_client_manager
+            google_client_manager=google_client_manager,
+            google_sheet_key=env.str('GOOGLE_SHEET_KEY')
+
         )
     )

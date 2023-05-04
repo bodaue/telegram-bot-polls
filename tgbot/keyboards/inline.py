@@ -35,3 +35,10 @@ def budget_keyboard() -> InlineKeyboardMarkup:
                                          callback_data=f'budget:{amount}'))
     builder.adjust(2)
     return builder.as_markup()
+
+
+chat_link_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [
+        InlineKeyboardButton(text='Узнать цены', url='https://t.me/LAAUTOLAbot')
+    ]
+])
