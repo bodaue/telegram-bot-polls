@@ -1,13 +1,13 @@
 [Unit]
-Description=Course Bot
-After=network.target
+Description=Bot Polls
+After=multi-user.target
 
 [Service]
-User=tgbot
-Group=tgbot
+User=root
+Group=admin
 Type=simple
-WorkingDirectory=/opt/tgbot
-ExecStart=/opt/tgbot/venv/bin/python bot.py
+#WorkingDirectory=/opt/tgbot
+ExecStart=/root/telegram_bot_polls/venv/bin/python /root/telegram_bot_polls/bot.py
 Restart=always
 
 [Install]

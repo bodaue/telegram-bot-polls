@@ -4,6 +4,7 @@ import logging
 import betterlogging as bl
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 
 from tgbot.config import load_config
 from tgbot.handlers.admin import admin_router
@@ -28,6 +29,7 @@ def register_global_middlewares(dp: Dispatcher, config):
     dp.message.outer_middleware(ConfigMiddleware(config))
     dp.callback_query.outer_middleware(ConfigMiddleware(config))
     dp.message.middleware(ThrottlingMiddleware())
+    dp.callback_query.middleware(CallbackAnswerMiddleware())
 
 
 def register_logger():

@@ -10,7 +10,7 @@ google-auth-oauthlib
 
 gspread-asyncio
 
-git+git://github.com/robin900/gspread-formatting
+# git+git://github.com/robin900/gspread-formatting
 
 Faker~=8.8.1
 pymongo~=4.3.3
