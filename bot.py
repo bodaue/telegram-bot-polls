@@ -54,8 +54,8 @@ async def main():
     dp = Dispatcher(storage=storage)
 
     for router in [
-        admin_router,
         user_router,
+        admin_router,
         not_caught_router
     ]:
         dp.include_router(router)
